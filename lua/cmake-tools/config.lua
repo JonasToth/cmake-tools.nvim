@@ -16,6 +16,7 @@ local Config = {
   kit = nil,
   configure_preset = nil,
   build_preset = nil,
+  test_preset = nil,
   base_settings = {
     env = {},
     build_dir = "",
@@ -24,6 +25,7 @@ local Config = {
     generate_options = {},
     build_options = {},
     show_disabled_build_presets = true,
+    show_disabled_test_presets = true,
   }, -- general config
   target_settings = {}, -- target specific config
   executor = nil,
@@ -43,6 +45,7 @@ function Config:new(const)
   obj.base_settings.use_preset = const.cmake_use_preset
 
   obj.base_settings.show_disabled_build_presets = const.cmake_show_disabled_build_presets
+  obj.base_settings.show_disabled_test_presets = const.cmake_show_disabled_test_presets
 
   obj.executor = const.cmake_executor
   obj.runner = const.cmake_runner
@@ -139,6 +142,10 @@ end
 
 function Config:show_disabled_build_presets()
   return self.base_settings.show_disabled_build_presets
+end
+
+function Config:show_disabled_test_presets()
+  return self.base_settings.show_disabled_test_presets
 end
 
 function Config:generate_build_directory()

@@ -131,7 +131,7 @@ function Presets:parse(cwd)
 end
 
 -- Retrieve all preset names for the given type
--- @param type: `buildPresets` or `configurePresets`
+-- @param type: `buildPresets`, `configurePresets` or 'testPresets'
 -- @param {opts}: include_hidden(bool|nil).
 --                If true, hidden preset will be included in result.
 -- @returns : list with all preset names
@@ -178,6 +178,28 @@ function Presets:get_build_preset_names(opts)
   return ret
 end
 
+function Presets:get_test_preset_names(opts)
+  local presets = get_preset_names(self.testPresets, opts)
+  local ret = {}
+  for _, tpreset in ipairs(presets) do
+    local cpresetName = self:get_test_preset(tpreset, opts).configurePreset
+
+    if not cpresetName then
+      table.insert(ret, tpreset)
+    else
+      local cpreset = self:get_configure_preset(
+        cpresetName,
+        { include_hidden = true, include_disabled = opts.include_disabled }
+      )
+      if cpreset and (opts.include_disabled or not cpreset.disabled) then
+        table.insert(ret, tpreset)
+      end
+    end
+  end
+
+  return ret
+end
+
 local function get_preset(name, tbl, opts)
   local include_hidden = opts and opts.include_hidden
   local include_disabled = opts and opts.include_disabled
@@ -200,6 +222,10 @@ end
 
 function Presets:get_build_preset(name, opts)
   return get_preset(name, self.buildPresets, opts)
+end
+
+function Presets:get_test_preset(name, opts)
+  return get_preset(name, self.testPresets, opts)
 end
 
 function Presets.find_preset_files(cwd)

@@ -35,6 +35,7 @@ cmake.get_build_type() -- return current build type
 cmake.get_kit() -- return current using kit
 cmake.get_configure_preset() -- return current using configure preset
 cmake.get_build_preset() -- return current using build preset
+cmake.get_test_preset() -- return current using test preset
 cmake.get_build_directory() -- return current using build directory
 cmake.get_launch_targets() -- return all launch targets
 cmake.get_build_targets() -- return all build targets
